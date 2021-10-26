@@ -36,6 +36,24 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+// [POST] /api/posts
+router.post("/", async (req, res) => {
+  try {
+    const { title, contents } = req.body;
+    if (title && contents) {
+      const newPost = await Post.insert({ title, contents });
+      res.status(201).json({ id: newPost.id, title, contents });
+    } else {
+      res.status(400).json({
+        message: "Please provide title and contents for the post",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "There was an error while saving the post to the database",
+    });
+  }
+});
 
 // Exports
 module.exports = router;
